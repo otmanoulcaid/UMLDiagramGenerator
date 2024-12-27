@@ -14,32 +14,26 @@ public class classRepresentation
 	private List<String> methodes;
 	private Class<?> cls;
 
-	public classRepresentation(String className) {
-		attributes=new Vector<String>();
-		methodes=new Vector<String>();
-		try {
-			this.cls=Class.forName(className);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-
-		addAttributes();
-		addMethodes();
+	public classRepresentation(Class<?> cls)
+	{
+		setCls(cls);
 	}
 	
 	private void addAttributes()
 	{
+			attributes=new Vector<String>();
 			Field[] fields = cls.getDeclaredFields();
 			for (Field field : fields)
 				attributes.add(
 						getModifier(field.getModifiers())
-						+" "+field.getName()
+						+field.getName()
 						+":"+field.getType().getSimpleName()
 				);		
 	}
-	
+
 	private void addMethodes()
 	{
+		methodes=new Vector<String>();
 		Method[] methodes=cls.getDeclaredMethods();
 		for (Method methode : methodes)
 		{
@@ -58,31 +52,41 @@ public class classRepresentation
 		}
 	}
 
-	private String getModifier(int modifier){
-			// l'utilisation de 7 ici pour avoir que les 3 premier bit
-			// de l'entier qui represente les 3 modificateur d'accèes
-			// <PUBLIC, PRIVATE, PROTECTED>
-			return (
-					switch (modifier & 7)
-					{
-						case Modifier.PUBLIC -> "+";
-						case Modifier.PRIVATE -> "-";
-						case Modifier.PROTECTED -> "#";
-						default -> "~";
-					}
-				);
-		}
+	private String getModifier(int modifier)
+	{
+		// l'utilisation de 7 ici pour avoir que les 3 premier bit
+		// de l'entier qui represente les 3 modificateur d'accèes
+		// <PUBLIC, PRIVATE, PROTECTED>
+		return (
+			switch (modifier & 7)
+			{
+				case Modifier.PUBLIC -> "+";
+				case Modifier.PRIVATE -> "-";
+				case Modifier.PROTECTED -> "#";
+				default -> "~";
+			}
+		);
+	}
+	
+	public void setCls(Class<?> cls)
+	{
+		this.cls = cls;
+		addAttributes();
+		addMethodes();
+	}
 
-	public List<String> getAttributes() {
+	public List<String> getAttributes()
+	{
 		return attributes;
 	}
 
-	public List<String> getMethodes() {
+	public List<String> getMethodes()
+	{
 		return methodes;
 	}
 
-	public static void main(String[] args)
+	public static void main(String[] args) throws Exception
 	{
-		System.out.println(new classRepresentation("java.lang.String").getMethodes());
+			System.out.println(new classRepresentation(Class.forName("java.lang.String")).getAttributes());			
 	}
 }

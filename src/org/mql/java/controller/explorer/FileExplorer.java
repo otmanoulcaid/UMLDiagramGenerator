@@ -17,27 +17,32 @@ import org.mql.java.controller.dataType.DataReflexion;
 
 public class FileExplorer
 {
+	private static Map<String, Vector<DataReflexion>> packages;
 	private String packageName;
-    private String Path;
-    private static Map<String, Vector<DataReflexion>> files = new HashMap<>();
+    private String path;
+
+    static
+    {
+    	packages = new HashMap<>();
+    }
     
     public FileExplorer(String path)
     {
     	this.packageName = "";
-        this.Path = path;
+        this.path = path;
     }
 
     private FileExplorer (String path, String packageName)
     {
     	this.packageName = packageName;
-        this.Path = path;
+        this.path = path;
     }
 
-    public void loadPackages ()
+    public void loadPackages()
     {
     	try
     	{
-	        File f = new File(Path);
+	        File f = new File(path);
 	        if (!f.exists()) return ;
 	        File[] fileList = f.listFiles();
 	        if (fileList == null) return ;
@@ -46,9 +51,9 @@ public class FileExplorer
 		            {
 		            	String className = file.getName().replace(".java", "");
 		            	String key = packageName.substring(0, packageName.length() - 1);
-		            	if (!files.containsKey(key))
-		            		files.put(key, new Vector<DataReflexion>());
-	            		files.get(key).add(new DataReflexion(packageName + className));
+		            	if (!packages.containsKey(key))
+		            		packages.put(key, new Vector<DataReflexion>());
+		            	packages.get(key).add(new DataReflexion(packageName + className));
 		            }
 		            else
 		            {
@@ -61,8 +66,8 @@ public class FileExplorer
     	}
     }
     
-    public Map<String, Vector<DataReflexion>> getList()
+    public Map<String, Vector<DataReflexion>> getPackages()
     {
-    	return files;
+    	return packages;
     }
 }

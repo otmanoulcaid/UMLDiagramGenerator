@@ -1,10 +1,24 @@
 package org.mql.java.controller.dataType;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.util.Vector;
+
 public class DataReflexion
 {
 	DataType type = DataType.CLASS;
 	private String name;
 	private Class<?> cls;
+	private Class<?> superCls;
+	private Vector<Class<?>> fields;
+	private Vector<Class<?>> annotatios;
+	private Vector<Class<?>> implementedInterfaces;
+	
+	{
+		fields = new Vector<>();
+		annotatios = new Vector<>();
+		implementedInterfaces = new Vector<>();
+	}
 	
 	@SuppressWarnings("unused")
 	private DataReflexion()
@@ -23,14 +37,61 @@ public class DataReflexion
 		{
 			cls = null;
 		}
+		superCls = cls.getSuperclass();
+		fieldRelation();
+		interfacesRelation();
+		annotationRealtion();
 	}
 	
-	public Class<?> getClassObject()
+	private void annotationRealtion()
+	{
+		Annotation [] ans = cls.getAnnotations();
+		for (Annotation an : ans)
+			annotatios.add(an.getClass());
+	}
+	
+	private void interfacesRelation()
+	{
+		Class<?> [] interfaces = cls.getInterfaces();
+		for (Class<?> iCls : interfaces)
+			implementedInterfaces.add(iCls);
+	}
+	
+	private void fieldRelation()
+	{
+		Field []fs = cls.getDeclaredFields();
+		for (Field field : fs)
+			if (!field.getType().isPrimitive())
+				fields.add(field.getType());
+	}
+	
+	public Class<?> getCls()
 	{
 		return cls;
 	}
+	
+	public Vector<Class<?>> getFieldClasses()
+	{
+		return fields;
+	}
+	
+	public Vector<Class<?>> getImplementedInterfaces()
+	{
+		return implementedInterfaces;
+	}
+	
+	public Class<?> getSuperCls()
+	{
+		return superCls;
+	}
+	
+	public Vector<Class<?>> getAnnotations()
+	{
+		return annotatios;
+	}
 
-	public String getName() {
+	public String getName()
+	{
 		return name;
 	}
 

@@ -1,7 +1,9 @@
 package org.mql.java.ui;
 
 import javax.swing.JFrame;
+import javax.swing.SwingContainer;
 
+@SwingContainer
 public class UMLDiagramGenerator extends JFrame{
 
 	private static final long serialVersionUID = 1L;
