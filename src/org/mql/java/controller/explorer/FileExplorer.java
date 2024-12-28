@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import org.mql.java.controller.dataType.DataReflexion;
+import org.mql.java.controller.data.DataReflexion;
 
 /*
  * Cette classe est utile pour vérifier l'existence des fichiers tests.

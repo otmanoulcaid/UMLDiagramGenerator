@@ -1,4 +1,4 @@
-package org.mql.java.controller.dataType;
+package org.mql.java.controller.data;
 
 public enum DataType {
 	CLASS,
