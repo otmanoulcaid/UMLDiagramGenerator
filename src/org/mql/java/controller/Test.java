@@ -3,6 +3,7 @@ package org.mql.java.controller;
 import java.util.Map;
 import java.util.Vector;
 
+import org.mql.java.controller.data.DataPersistence;
 import org.mql.java.controller.data.DataReflexion;
 import org.mql.java.controller.explorer.FileExplorer;
 
@@ -37,5 +38,7 @@ public class Test
 			System.out.println(RED + key + ":" + RESET);
 			putPackage(map.get(key));
 		}
+		
+		new DataPersistence().persistData(map);
 	}
 }

@@ -80,9 +80,11 @@ public class DataReflexion
 		return implementedInterfaces;
 	}
 	
-	public Class<?> getSuperCls()
+	public Vector<Class<?>> getSuperCls()
 	{
-		return superCls;
+		Vector<Class<?>> vect = new Vector<>();
+		vect.add(superCls);
+		return vect;
 	}
 	
 	public Vector<Class<?>> getAnnotations()
