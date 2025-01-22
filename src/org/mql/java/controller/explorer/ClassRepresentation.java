@@ -8,32 +8,38 @@ import java.util.List;
 import java.util.Vector;
 
 
-public class classRepresentation
+public class ClassRepresentation
 {
 	private List<String> attributes;
 	private List<String> methodes;
 	private Class<?> cls;
 
-	public classRepresentation(Class<?> cls)
+	
+	{		
+		methodes = new Vector<>();
+		attributes = new Vector<>();
+	}
+
+
+	public ClassRepresentation(Class<?> cls)
 	{
 		setCls(cls);
 	}
 	
 	private void addAttributes()
 	{
-			attributes=new Vector<String>();
 			Field[] fields = cls.getDeclaredFields();
 			for (Field field : fields)
 				attributes.add(
 						getModifier(field.getModifiers())
 						+field.getName()
 						+":"+field.getType().getSimpleName()
+						+"\n"
 				);		
 	}
 
 	private void addMethodes()
 	{
-		methodes=new Vector<String>();
 		Method[] methodes=cls.getDeclaredMethods();
 		for (Method methode : methodes)
 		{
@@ -48,7 +54,7 @@ public class classRepresentation
 				string += methodeParams[methodeParams.length - 1].getType().getSimpleName();
 
 			string += ") :" + methode.getReturnType().getSimpleName();
-			this.methodes.add(string);
+			this.methodes.add(string + "\n");
 		}
 	}
 
@@ -87,6 +93,6 @@ public class classRepresentation
 
 	public static void main(String[] args) throws Exception
 	{
-			System.out.println(new classRepresentation(Class.forName("java.lang.String")).getAttributes());			
+			System.out.println(new ClassRepresentation(Class.forName("java.lang.String")).getAttributes());			
 	}
 }

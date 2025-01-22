@@ -12,8 +12,7 @@ public class Test
 	private static final String RESET = "\033[0m";
 	private static final String RED = "\033[31m";
 	private static final String GREEN = "\033[32m";
-	private static final String YELLOW = "\033[33m";
-	private static final String BLUE = "\033[34m";
+
 
 	private static void putPackage(Vector<DataReflexion> vect)
 	{
