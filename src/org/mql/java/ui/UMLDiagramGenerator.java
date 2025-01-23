@@ -1,32 +1,33 @@
 package org.mql.java.ui;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.SwingContainer;
 
+import org.mql.java.controller.data.DataPersistence;
 import org.mql.java.controller.data.DataReflexion;
 import org.mql.java.controller.explorer.FileExplorer;
 
-@SwingContainer
-public class UMLDiagramGenerator extends JFrame{
+public class UMLDiagramGenerator extends JFrame
+{
 
 	private static final long serialVersionUID = 1L;
 	
 	JPanel mainPanel;
-
-//	private void setScrollPane() {
-//		scrollPane = new JScrollPane(contentPanel);
-//		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-//		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-//		
-//		this.add(scrollPane);
-//	}
+	PathBrowser browser;
+	
+	{
+		browser = new PathBrowser();
+		mainPanel = new JPanel();
+	}
 
 	private JPanel getPackagesPanel(Map<String, Vector<DataReflexion>> map)
 	{
@@ -36,27 +37,47 @@ public class UMLDiagramGenerator extends JFrame{
 			panel.add(new PackagePanel(name, map.get(name)));
 		return panel;
 	}
-	
-	public UMLDiagramGenerator(String path)
+
+	private void handlEvent()
 	{
+		JPanel render = new JPanel();
+		String path = browser.getInput().getText();
 		FileExplorer f = new FileExplorer(path);
-		f.loadPackages();
-
-		JPanel panel = getPackagesPanel(f.getPackages());
-		JScrollPane scrollPane = new JScrollPane(panel);
-
+		try
+		{
+			f.loadPackages();
+			DataPersistence dp = new DataPersistence();
+			dp.persistData(f.getPackages());
+			render = getPackagesPanel(f.getPackages());
+		}
+		catch (Exception e)
+		{
+			render.add(new JLabel(e.getMessage() + " : \'" + path + "\'"));
+		}
+		
+		JScrollPane scrollPane = new JScrollPane(render);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
-		this.add(scrollPane);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		pack();
-		setLocationRelativeTo(null);
-		setVisible(true);
+		mainPanel.removeAll();
+		mainPanel.add(scrollPane, BorderLayout.CENTER);
+		
+		// Refresh the panel
+		mainPanel.revalidate();
+		mainPanel.repaint();
 	}
+	
+	public UMLDiagramGenerator()
+	{
+        mainPanel.setLayout(new BorderLayout());
+        browser.getButton().addActionListener(e->handlEvent());
 
-	public static void main(String[] args) {
-		new UMLDiagramGenerator(".\\src");
+        add(browser, BorderLayout.NORTH);
+        add(mainPanel, BorderLayout.CENTER);
+
+        setPreferredSize(new Dimension(1500, 800));
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
 	}
-
 }

@@ -1,7 +1,10 @@
 package org.mql.java.controller.data;
 
 import java.io.File;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -65,14 +68,18 @@ public class DataPersistence
 			return transformer;
 	}
 	
-	private Element getChilds(Vector<Class<?>> vector, String relation)
+	private Element getChilds(List<Class<?>> vector, String relation)
 	{
 		Element element = document.createElement(relation);
+		Set<String> unique = new HashSet<>();
 		for (Class<?> cls : vector)
 		{
-			Element type = document.createElement("type");
-			type.appendChild(document.createTextNode(cls.getName()));
-			element.appendChild(type);
+			if (unique.add(cls.getName()))
+			{				
+				Element type = document.createElement("type");
+				type.appendChild(document.createTextNode(cls.getName()));
+				element.appendChild(type);
+			}
 		}
 		
 		return element;
@@ -93,7 +100,7 @@ public class DataPersistence
 		return classElement;
 	}
 
-	private Element createPackageElement(String packName, Vector<DataReflexion> classes)
+	private Element createPackageElement(String packName, List<DataReflexion> classes)
 	{
 		Element packageTag = document.createElement("package");
 		packageTag.setAttribute("name", packName);

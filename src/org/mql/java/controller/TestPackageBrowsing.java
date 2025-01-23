@@ -7,7 +7,7 @@ import org.mql.java.controller.data.DataPersistence;
 import org.mql.java.controller.data.DataReflexion;
 import org.mql.java.controller.explorer.FileExplorer;
 
-public class Test
+public class TestPackageBrowsing
 {
 	private static final String RESET = "\033[0m";
 	private static final String RED = "\033[31m";
@@ -26,7 +26,7 @@ public class Test
 		}
 	}
 
-	public static void main(String[] args)
+	public static void main(String[] args) throws Exception
 	{
 //		FileExplorer f = new FileExplorer("C:\\\\Users\\\\OULCAID\\\\Desktop\\\\UMLDiagramGenerator\\src");
 		FileExplorer f = new FileExplorer(".\\src");
